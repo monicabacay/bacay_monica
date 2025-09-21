@@ -197,46 +197,53 @@ public function update($id) {
 
 public function search()
 {
-    $keyword = $_GET['keyword'] ?? '';
+    // accept either ?keyword= (used by the JS) or ?search= (non-JS fallback)
+    $keyword = isset($_GET['keyword']) ? trim($_GET['keyword']) : (isset($_GET['search']) ? trim($_GET['search']) : '');
 
-    // call StudentsModel instead of writing SQL here
+    // call StudentsModel (you already have this)
     $results = $this->StudentsModel->searchStudents($keyword);
 
-    $catIcons = ["🐱", "😺", "😸", "😹", "😻"];
-    $i = 0;
     if (!empty($results)) {
         foreach ($results as $row) {
-            echo '
-            <tr>
-                <td>';
-            // ✅ Profile picture check
-            if (!empty($row['profile_pic'])) {
-                echo '<img src="/upload/students/' . htmlspecialchars($row['profile_pic']) . '" 
-                          alt="Profile" width="60" height="60" style="border-radius:50%;">';
-            } else {
-                echo '<img src="/upload/default.png" 
-                          alt="No Profile" width="60" height="60" style="border-radius:50%;">';
-            }
-            echo '</td>
-                <td>' . htmlspecialchars($row['id']) . ' ' . $catIcons[$i % count($catIcons)] . '</td>
-                <td>' . htmlspecialchars($row['first_name']) . '</td>
-                <td>' . htmlspecialchars($row['last_name']) . '</td>
-                <td>' . htmlspecialchars($row['email']) . '</td>
-                <td class="actions">
-                    <a href="' . site_url('/update/'.$row['id']) . '" class="btn update">✏️ Update</a>
-                    <a href="' . site_url('/delete/'.$row['id']) . '" 
-                       class="btn delete"
-                       onclick="return confirm(\'Are you sure you want to delete this record?\');">
-                       🗑️ Delete
-                    </a>
-                </td>
-            </tr>';
-            $i++;
+            // raw values
+            $idRaw    = isset($row['id']) ? (string) $row['id'] : '';
+            $firstRaw = isset($row['first_name']) ? (string) $row['first_name'] : '';
+            $lastRaw  = isset($row['last_name']) ? (string) $row['last_name'] : '';
+            $emailRaw = isset($row['email']) ? (string) $row['email'] : '';
+
+            // escaped values for HTML
+            $id    = htmlspecialchars($idRaw,    ENT_QUOTES, 'UTF-8');
+            $first = htmlspecialchars($firstRaw, ENT_QUOTES, 'UTF-8');
+            $last  = htmlspecialchars($lastRaw,  ENT_QUOTES, 'UTF-8');
+            $email = htmlspecialchars($emailRaw, ENT_QUOTES, 'UTF-8');
+
+            // profile picture path (safe-escaped)
+            $profilePic = !empty($row['profile_pic'])
+                ? '/upload/students/' . htmlspecialchars($row['profile_pic'], ENT_QUOTES, 'UTF-8')
+                : '/upload/default.png';
+
+            // URLs (URL-encoded then escaped for HTML)
+            $updateUrl = htmlspecialchars(site_url('/update/' . rawurlencode($idRaw)), ENT_QUOTES, 'UTF-8');
+            $deleteUrl = htmlspecialchars(site_url('/delete/' . rawurlencode($idRaw)), ENT_QUOTES, 'UTF-8');
+
+            echo "<tr>
+                    <td><img src=\"{$profilePic}\" alt=\"Profile\" width=\"60\" height=\"60\" style=\"border-radius:50%;\"></td>
+                    <td>{$id}</td>
+                    <td>{$first}</td>
+                    <td>{$last}</td>
+                    <td>{$email}</td>
+                    <td>
+                        <a href=\"{$updateUrl}\">Update</a>
+                        <a href=\"{$deleteUrl}\" onclick=\"return confirm('Are you sure you want to delete this record?');\">Delete</a>
+                    </td>
+                  </tr>";
         }
     } else {
         echo "<tr><td colspan='6' style='text-align:center;'>No results found</td></tr>";
     }
 }
+
+
 
 
 public function login() {
