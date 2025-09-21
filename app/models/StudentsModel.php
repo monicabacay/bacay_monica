@@ -52,7 +52,7 @@ public function searchStudents(string $keyword, int $page = 1, int $per_page = 1
 
     if (trim($keyword) !== '') {
         $kw = "%{$keyword}%";
-        $sql = "SELECT id, first_name, last_name, emails, profile_pic
+        $sql = "SELECT id, first_name, last_name, email, profile_pic
                 FROM students
                 WHERE first_name LIKE ?
                    OR last_name LIKE ?
