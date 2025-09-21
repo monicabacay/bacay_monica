@@ -43,7 +43,7 @@
 
   .container {
     width: 90%;
-    max-width: 1000px;
+    max-width: 1100px;
     position: relative;
     z-index: 1;
   }
@@ -89,6 +89,10 @@
     transform: translateY(-2px);
   }
 
+  .id{
+      padding-left: 45px;
+    }
+
   /* Search Box */
   .search-box input {
     padding: 10px 14px;
@@ -108,14 +112,16 @@
   }
 
   /* Table */
-  table {
-    border-collapse: collapse;
-    width: 100%;
-    background-color: #ffffff;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
-  }
+ table {
+  border-collapse: collapse;
+  width: 100%;
+  max-width: 1400px; /* match container */
+  margin: 0 auto;
+  background-color: #ffffff;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+}
 
   th, td {
     padding-top: 14px;
@@ -127,20 +133,22 @@
     border-bottom: 1px solid #e5e7eb;
   }
 
-   .table-header {
-      display: grid;
-      grid-template-columns: 1fr 2fr 2fr 3fr 2fr;
-       background: #800020;
-      color: white;
-      font-weight: bold;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      width: 80%;
-      margin: 0 auto;
-      border-radius: 15px 15px 0 0;
-      animation: slideUp 0.8s ease forwards;
-      opacity: 0;
-    }
+  .table-header {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr 2fr 2fr 2.5fr 2fr; /* add more proportional space */
+  background: #800020;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px 0;
+  width: 100%;
+  max-width: 1400px; /* match container width */
+  margin: 0 auto;
+  border-radius: 12px 12px 0 0;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+  animation: fadeIn 0.8s ease forwards;
+  opacity: 0;
+}
 
   tr:nth-child(even) {
     background-color: #f3f4f6; /* Light grey rows */
@@ -222,14 +230,14 @@
   /* Table Header Div */
 .table-header {
   display: grid;
-  grid-template-columns: 1fr 2fr 2fr 3fr 2fr;
+  grid-template-columns: 1fr 2fr 2fr 2fr 2fr 2fr;
   background: #800020; /* Burgundy */
   color: #ffffff;
   font-weight: bold;
   text-align: center;
-  padding: 12px 0;
+  padding: 25px 0;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
   border-radius: 12px 12px 0 0;
   box-shadow: 0 4px 10px rgba(0,0,0,0.25);
@@ -264,12 +272,12 @@
 
   <!-- Student Table Header -->
 <div class="table-header">
-  <div >Profile Pic </div>
-  <div>ID</div>
-  <div>First Name</div>
-  <div>Last Name</div>
-  <div>Email</div>
-  <div>Actions</div>
+  <div class="id">Profile Pic </div>
+  <div class="id">ID</div>
+  <div class="id">First Name</div>
+  <div class="id">Last Name</div>
+  <div class="id">Email</div>
+  <div class="id">Actions</div>
 </div>
 
 <!-- Student Table -->
@@ -291,7 +299,7 @@
         <td><?=$students['first_name']; ?></td>
         <td><?=$students['last_name']; ?></td>
         <td><?=$students['email']; ?></td>
-        <td>
+        <td >
           <a href="<?=site_url('/update/'.$students['id']); ?>">Update</a> 
           <a href="<?=site_url('/delete/'.$students['id']); ?>" onclick="return confirm('Are you sure you want to delete this record?');">Delete</a>
         </td>
